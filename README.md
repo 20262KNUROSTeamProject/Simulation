@@ -31,6 +31,8 @@ NVIDIA의 jetbot을 에셋으로 사용하고 localizing을 위해 IMU 센서와
 | `/cmd_vel` | 로봇의 주행 명령 | `geometry_msgs/Twist` | `geometry_msgs/Vector3 linear`<br>`geometry_msgs/Vector3 angular` | m/s<br>rad/s | - |
 | `/scan` | 라이다 센서 값 발행 | `sensor_msgs/msg/LaserScan` | - | - | intensity 데이터는 라이다 센서를 기준으로 시계 방향으로 진행 |
 | `/imu` | imu 센서 값 발행 | `sensor_msgs/msg/Imu` | - | - | 칼만 필터 구현 시 활용 가능 |
+|`/odom` | 초기 로봇 위치에서 현재 위치의 translation, rotation | - | - | - | - |
+|`/tf` | odom to base_link, base_link to base_scan tf | - | - | - | - |
 
 ### 결과
 **Isacc sim GUI 결과**
