@@ -28,38 +28,54 @@ dome_light.set_intensities(1000)
 # build map from .pgm file
 # ==============================
 
-import json
-from PIL import Image
-import numpy as np
-from pxr import Gf, UsdGeom, UsdPhysics
 import omni.usd
 
-# Load map configuration
-CONFIG_PATH = DATA_ROOT_DIR / "map_config" / "map.json"
-with CONFIG_PATH.open("r", encoding="utf-8") as f:
-    config = json.load(f)
+stage = omni.usd.get_context().get_stage()
 
-image_path = CONFIG_PATH.parent / config["map_path"]
-resolution = float(config["pixel_resolution"])
-wall_height = float(config["wall_height"])
-wall_thickness = float(config["wall_thickness"])
-origin_x, origin_y, origin_yaw = config["origin"]
+from pxr import UsdGeom, UsdPhysics, Gf, Sdf
+from build_map_helper import build_map, add_wall_segment, pixel_to_world
 
-image = np.asarray(
-    Image.open(image_path).convert("L")
-)
+root_path = "/World/GeneratedMap"
+UsdGeom.Xform.Define(stage, root_path)
 
-height_px, width_px = image.shape
-map_width = width_px * resolution
-map_height = height_px * resolution
+all_segments, config = build_map(DATA_ROOT_DIR)
 
-print(f'[INFO] Map size: {map_height,map_width}')
+resolution = config['resolution']
+(origin_x, origin_y, origin_yaw) = config['origin']
+default_thickness = float(config['wall_thickness'])
+image_height = config['image_shape'][0]
 
-# Convert image into occupied cells
-occupied = image < 100
-
-
-
+for i, segment in enumerate(all_segments):
+    cx_px, cy_px = segment["center_px"]
+    
+    cx, cy = pixel_to_world(
+        cx_px,
+        cy_px,
+        image_height,
+        resolution, 
+        origin_x, 
+        origin_y, 
+    ) 
+    
+    # Place the wall so its bottom sits on z = 0. 
+    height = segment["height_m"] 
+    center_z = height / 2.0 
+    
+    # The estimated width can be noisy; enforce a minimum. 
+    thickness = max( 
+        segment["width_m"], 
+        default_thickness, 
+    ) 
+    
+    add_wall_segment( 
+        stage=stage, 
+        prim_path=f"{root_path}/Wall_{i:04d}", 
+        center=(cx, cy, center_z), 
+        length=segment["length_m"], 
+        thickness=thickness, 
+        height=height, 
+        angle_deg=-segment["angle_deg"], 
+    )
 
 print("[INFO] Map generation complete.")
 

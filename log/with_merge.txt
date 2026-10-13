@@ -1,0 +1,18 @@
+[INFO] Final segment count: 17
+[0] component=1 length=2.506m width=0.050m height=0.500m angle=150.3deg
+[1] component=1 length=2.573m width=0.050m height=0.500m angle=30.4deg
+[2] component=1 length=4.250m width=0.075m height=0.500m angle=90.0deg
+[3] component=1 length=0.101m width=1.775m height=0.500m angle=89.1deg
+[4] component=1 length=1.698m width=0.075m height=0.500m angle=87.4deg
+[5] component=1 length=2.100m width=0.075m height=0.500m angle=0.0deg
+[6] component=1 length=1.547m width=0.075m height=0.500m angle=91.9deg
+[7] component=1 length=4.350m width=0.075m height=0.500m angle=0.3deg
+[8] component=1 length=1.850m width=0.075m height=0.500m angle=90.0deg
+[9] component=1 length=1.096m width=0.075m height=0.500m angle=177.3deg
+[10] component=1 length=1.450m width=0.075m height=0.500m angle=90.0deg
+[11] component=1 length=1.197m width=0.075m height=0.500m angle=3.7deg
+[12] component=1 length=3.550m width=0.075m height=0.500m angle=90.0deg
+[13] component=1 length=0.100m width=3.000m height=0.500m angle=89.6deg
+[14] component=2 length=2.400m width=0.150m height=0.500m angle=0.0deg
+[15] component=2 length=1.733m width=0.050m height=0.500m angle=133.8deg
+[16] component=2 length=1.662m width=0.050m height=0.500m angle=43.8deg

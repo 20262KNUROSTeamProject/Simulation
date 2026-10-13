@@ -1,7 +1,7 @@
 {
     "map_path":"map.pgm",
     "pixel_resolution":0.05,
-    "wall_height":0.03,
+    "wall_height":0.5,
     "wall_thickness":0.015,
     "origin":[0.0, 0.0, 0.0]
 }
