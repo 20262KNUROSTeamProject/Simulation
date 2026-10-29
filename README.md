@@ -3,8 +3,8 @@
 
 # 시뮬레이션 구현
 ### 사용하는 툴
-- isaac sim
-
+- isaac sim(6.0.1)
+- ros2(humble)
 <br><br><br>
 
 ### 시스템 구성
@@ -20,11 +20,11 @@ NVIDIA의 jetbot을 에셋으로 사용하고 localizing을 위해 IMU 센서와
 | wheelDistance | m | 0.1125 |
 | wheelRadius | m | 0.03 |
 
-<br><br><br>
+<br>
 
 **데이터 인터페이스**
 
-***topic***
+***msgs***
 
 | 이름 | 역할 | 타입 | 파라미터 | 단위 | 추가 내용 |
 | --- | --- | --- | --- | --- | --- |
@@ -34,7 +34,21 @@ NVIDIA의 jetbot을 에셋으로 사용하고 localizing을 위해 IMU 센서와
 |`/odom` | 초기 로봇 위치에서 현재 위치의 translation, rotation | - | - | - | - |
 |`/tf` | odom to base_link, base_link to base_scan tf | - | - | - | - |
 
-### 결과
-**Isacc sim GUI 결과**
-<br><br>
+***actions***
+
+***services***
+
+# 결과
+
+### How to run (Windows)
+
+`src/run.bat` 파일 실행
+
+### Isacc sim GUI 결과
+<br>
+
 ![시범운전](data/imgs/drive.gif)
+
+**Notice**
+
+| slam toolbox 실행 시 base_frame 파라미터가 반드시 `base_link`로 되어있어야 함. odom_frame은 `odom`
