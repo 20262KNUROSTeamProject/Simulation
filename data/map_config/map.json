@@ -3,5 +3,5 @@
     "pixel_resolution":0.05,
     "wall_height":0.5,
     "wall_thickness":0.015,
-    "origin":[0.0, 0.0, 0.0]
+    "origin":[-2.37, -4.85, 0.0]
 }

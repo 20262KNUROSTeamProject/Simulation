@@ -16,7 +16,7 @@ ext_manager.set_extension_enabled_immediate(
 )
 
 # Load robot scene usd
-DATA_ROOT_DIR = Path("C:/Users/User/Desktop/ehrms/20262/Simulation/data")
+DATA_ROOT_DIR = Path(__file__).parent.parent / "data"
 asset_path = str(DATA_ROOT_DIR / "usd" / "jetson_scene.usd")
 stage_utils.add_reference_to_stage(usd_path=asset_path, path="/SceneAsset")
 
