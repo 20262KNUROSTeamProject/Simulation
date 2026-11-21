@@ -5,8 +5,9 @@ simulation_app = SimulationApp({"headless":False})
 import isaacsim.core.experimental.utils.stage as stage_utils
 from isaacsim.core.simulation_manager import SimulationManager
 from isaacsim.core.experimental.objects import DomeLight
+from isaacsim.core.utils.extensions import enable_extension
 from pathlib import Path
-
+import omni.usd
 # Enable `isaacsim.ros2.bridge` extension
 import omni.kit.app
 
@@ -15,10 +16,24 @@ ext_manager.set_extension_enabled_immediate(
     "isaacsim.ros2.bridge", True
 )
 
-# Load robot scene usd
+# ==============================
+# Load road scene usd
+# ==============================
 DATA_ROOT_DIR = Path(__file__).parent.parent / "data"
-asset_path = str(DATA_ROOT_DIR / "usd" / "jetson_scene.usd")
-stage_utils.add_reference_to_stage(usd_path=asset_path, path="/SceneAsset")
+
+# Enable the IRA extension
+enable_extension("isaacsim.replicator.agent.core")
+simulation_app.update()
+
+from build_map_helper import run_ira_generation
+road_asset_path = str(DATA_ROOT_DIR / "yaml" / "road_scene.walker.yaml")
+simulation_app.run_coroutine(run_ira_generation(road_asset_path, setup_simulation=True))
+
+# ==============================
+# Load robot scene usd
+# ==============================
+robot_asset_path = str(DATA_ROOT_DIR / "usd" / "jetson_scene_bigger.usd")
+stage_utils.add_reference_to_stage(usd_path=robot_asset_path, path="/SceneAsset")
 
 # Create dome light
 dome_light = DomeLight("/World/DomeLight")
@@ -27,15 +42,11 @@ dome_light.set_intensities(1000)
 # ==============================
 # build map from .pgm file
 # ==============================
-
-import omni.usd
-
-stage = omni.usd.get_context().get_stage()
-
-from pxr import UsdGeom, UsdPhysics, Gf, Sdf
 from build_map_helper import build_map, add_wall_segment, pixel_to_world
+from pxr import UsdGeom
 
 root_path = "/World/GeneratedMap"
+stage = omni.usd.get_context().get_stage()
 UsdGeom.Xform.Define(stage, root_path)
 
 all_segments, config = build_map(DATA_ROOT_DIR)

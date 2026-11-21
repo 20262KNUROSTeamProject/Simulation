@@ -447,3 +447,42 @@ def pixel_to_world(
 
     return x, y
 
+async def run_ira_generation(config_path:str, setup_simulation:bool = False, run_data_generation:bool=False):
+    from isaacsim.replicator.agent.core import api as IRA
+    from pathlib import Path
+    import tempfile
+    import yaml
+    import omni.kit.app
+
+    # 1. 원본 YAML을 읽어서 상대 경로를 로컬 절대 경로로 치환
+    with open(config_path, "r", encoding="utf-8") as f:
+        raw_cfg = yaml.safe_load(f)
+
+    env_cfg = raw_cfg["isaacsim.replicator.agent"]["environment"]
+    base_stage_asset_path = env_cfg["base_stage_asset_path"]
+
+    if not Path(base_stage_asset_path).is_absolute() and not base_stage_asset_path.startswith("http"):
+        base_dir = Path(__file__).resolve().parent.parent / "data"
+        env_cfg["base_stage_asset_path"] = ((base_dir / base_stage_asset_path).resolve().as_posix())
+
+    # 2. 절대 경로가 반영된 임시 YAML 파일 생성 후 IRA에 로드
+    with tempfile.NamedTemporaryFile(mode="w", suffix=".yaml", delete=False, encoding="utf-8") as tmp:
+        yaml.safe_dump(raw_cfg, tmp, sort_keys=False)
+        tmp_config_path = tmp.name
+
+    try:
+        result = IRA.load_config_file(tmp_config_path)
+        if not result:
+            raise RuntimeError(f"[ERROR] Failed to load IRA config: {config_path}")
+
+        if setup_simulation:
+            await IRA.setup_simulation()
+            app = omni.kit.app.get_app()
+            for _ in range(10):
+                await app.next_update_async()
+
+            if run_data_generation:
+                await IRA.start_data_generation_async(will_wait_until_complete=True)
+    finally:
+        # 임시 YAML 파일 정리
+        Path(tmp_config_path).unlink(missing_ok=True)
