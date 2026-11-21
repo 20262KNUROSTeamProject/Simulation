@@ -1,0 +1,30 @@
+isaacsim.replicator.agent:
+  version: 1.6.0
+  seed: 42
+  environment:
+    base_stage_asset_path: C:/Users/User/Desktop/ehrms/20262/Simulation/data/usd/road_scene.usd
+  character:
+    root_prim_path: /World/Charaters
+    motion_library_path: https://omniverse-content-staging.s3.us-west-2.amazonaws.com/Assets/Behavior/110.0/Samples/Assets/MotionLibrary/Human/HumanMotionLibrary.usd
+    groups:
+      test_person:
+        num: 2
+        asset_path: https://omniverse-content-production.s3-us-west-2.amazonaws.com/Assets/Isaac/6.0/Isaac/People/Characters/
+        routines:
+        - wander:
+            weight: 1.0
+            repeat: 1
+            walk:
+              speed_range:
+              - 0.8
+              - 1.5
+              distance_range:
+              - 3.0
+              - 8.0
+              navigation_areas: []
+            idle:
+            - animation: idle
+              weight: 1.0
+              time_range:
+              - 2.0
+              - 4.0
