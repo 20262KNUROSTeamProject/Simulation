@@ -17,23 +17,17 @@ ext_manager.set_extension_enabled_immediate(
 )
 
 # ==============================
-# Load road scene usd
-# ==============================
-DATA_ROOT_DIR = Path(__file__).parent.parent / "data"
-
-# Enable the IRA extension
-enable_extension("isaacsim.replicator.agent.core")
-simulation_app.update()
-
-from build_map_helper import run_ira_generation
-road_asset_path = str(DATA_ROOT_DIR / "yaml" / "road_scene.walker.yaml")
-simulation_app.run_coroutine(run_ira_generation(road_asset_path, setup_simulation=True))
-
-# ==============================
 # Load robot scene usd
 # ==============================
-robot_asset_path = str(DATA_ROOT_DIR / "usd" / "jetson_scene_bigger.usd")
+DATA_ROOT_DIR = Path(__file__).parent.parent / "data"
+robot_asset_path = str(DATA_ROOT_DIR / "usd" / "jetson_scene.usd")
 stage_utils.add_reference_to_stage(usd_path=robot_asset_path, path="/SceneAsset")
+
+# ==============================
+# Load road scene usd
+# ==============================
+road_asset_path = str(DATA_ROOT_DIR / "usd" / "road_scene.mini.usd")
+stage_utils.add_reference_to_stage(usd_path=road_asset_path, path="/SceneAsset/Environment")
 
 # Create dome light
 dome_light = DomeLight("/World/DomeLight")
@@ -42,7 +36,7 @@ dome_light.set_intensities(1000)
 # ==============================
 # build map from .pgm file
 # ==============================
-from build_map_helper import build_map, add_wall_segment, pixel_to_world
+""" from build_map_helper import build_map, add_wall_segment, pixel_to_world
 from pxr import UsdGeom
 
 root_path = "/World/GeneratedMap"
@@ -92,7 +86,7 @@ print("[INFO] Map generation complete.")
 
 # ========================================
 # Simulation runs until GUI window closed
-# ========================================
+# ======================================== """
 
 while simulation_app.is_running():
     simulation_app.update()

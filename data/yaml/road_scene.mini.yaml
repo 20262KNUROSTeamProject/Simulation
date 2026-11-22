@@ -1,0 +1,5 @@
+isaacsim.replicator.agent:
+  version: 1.6.0
+  seed: 42
+  environment:
+    base_stage_asset_path: usd/road_scene_without_walker.usd
